@@ -77,21 +77,20 @@ export function SlideEditor({ initialSlide }: SlideEditorProps) {
 
   return (
     <div className="h-screen flex flex-col">
-      <header className="border-b bg-card px-6 py-4">
+      <header className="border-b bg-black px-6 py-4 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">AI Slide Editor</h1>
-            <p className="text-sm text-muted-foreground">Edit your slides with natural language prompts</p>
+            <h1 className="text-2xl font-bold text-white">subwayslides</h1>
           </div>
           <div className="flex items-center gap-2">
             {backendStatus === "connected" && (
-              <div className="flex items-center gap-2 text-sm text-green-600">
+              <div className="flex items-center gap-2 text-sm text-green-400">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Backend Connected</span>
               </div>
             )}
             {backendStatus === "disconnected" && (
-              <div className="flex items-center gap-2 text-sm text-destructive">
+              <div className="flex items-center gap-2 text-sm text-red-400">
                 <AlertCircle className="h-4 w-4" />
                 <span>Backend Disconnected</span>
               </div>
@@ -111,7 +110,7 @@ export function SlideEditor({ initialSlide }: SlideEditorProps) {
 
       <div className="flex-1 overflow-hidden">
         <ResizablePanelGroup direction="horizontal" className="h-full">
-          <ResizablePanel defaultSize={60} minSize={30}>
+          <ResizablePanel defaultSize={70} minSize={30}>
             <div className="h-full p-6 overflow-auto">
               <div className="max-w-4xl mx-auto">
                 <h2 className="text-lg font-semibold mb-4">Current Slide</h2>
@@ -129,10 +128,10 @@ export function SlideEditor({ initialSlide }: SlideEditorProps) {
 
           <ResizableHandle withHandle />
 
-          <ResizablePanel defaultSize={40} minSize={30}>
+          <ResizablePanel defaultSize={30} minSize={15}>
             <div className="h-full p-6 overflow-auto bg-muted/30">
               <div className="max-w-2xl mx-auto">
-                <h2 className="text-lg font-semibold mb-4">Edit with AI</h2>
+                <h2 className="text-lg font-semibold mb-4">Welcome! Click on the button below to begin requesting changes to your slide. </h2>
                 <PromptInput onSubmit={handlePromptSubmit} isProcessing={isProcessing} />
               </div>
             </div>

@@ -105,7 +105,6 @@ export function PromptInput({ onSubmit, isProcessing }: PromptInputProps) {
     <Card className="p-4">
       <div className="space-y-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Enter your prompt</label>
           <Textarea
             ref={textareaRef}
             value={prompt}
@@ -118,28 +117,28 @@ export function PromptInput({ onSubmit, isProcessing }: PromptInputProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button onClick={handleTextSubmit} disabled={!prompt.trim() || isProcessing} className="flex-1">
-            {isProcessing ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                <Send className="mr-2 h-4 w-4" />
-                Submit Prompt
-              </>
-            )}
-          </Button>
-
           <Button
             onClick={toggleRecording}
             disabled={isProcessing}
             variant={isRecording ? "destructive" : "outline"}
-            size="icon"
-            className="shrink-0"
+            className="flex-1 h-12"
           >
-            {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+            {isRecording ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
+            <span className="sr-only">Toggle microphone</span>
+          </Button>
+
+          <Button
+            onClick={handleTextSubmit}
+            disabled={!prompt.trim() || isProcessing}
+            size="icon"
+            className="h-12 w-12"
+            aria-label={isProcessing ? "Processing prompt" : "Submit prompt"}
+          >
+            {isProcessing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
           </Button>
         </div>
 
