@@ -10,6 +10,63 @@ transition: slide-left
 mdc: true
 ---
 
+<style>
+@keyframes glitter {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+.glitter-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.glitter {
+  position: absolute;
+  color: white;
+  user-select: none;
+  pointer-events: none;
+  animation: glitter 3s ease-in-out infinite;
+  font-size: 20px;
+}
+
+.glitter:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 3s; }
+.glitter:nth-child(2) { left: 70%; top: 30%; animation-delay: 0.5s; animation-duration: 3.5s; }
+.glitter:nth-child(3) { left: 25%; top: 70%; animation-delay: 1s; animation-duration: 2.5s; }
+.glitter:nth-child(4) { left: 90%; top: 10%; animation-delay: 1.5s; animation-duration: 4s; }
+.glitter:nth-child(5) { left: 50%; top: 50%; animation-delay: 2s; animation-duration: 3s; }
+.glitter:nth-child(6) { left: 15%; top: 90%; animation-delay: 0.3s; animation-duration: 3.2s; }
+.glitter:nth-child(7) { left: 80%; top: 60%; animation-delay: 1.2s; animation-duration: 2.8s; }
+.glitter:nth-child(8) { left: 35%; top: 40%; animation-delay: 1.8s; animation-duration: 3.5s; }
+.glitter:nth-child(9) { left: 60%; top: 80%; animation-delay: 0.8s; animation-duration: 3.3s; }
+.glitter:nth-child(10) { left: 45%; top: 15%; animation-delay: 2.5s; animation-duration: 2.7s; }
+</style>
+
+<div class="glitter-container">
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+  <span class="glitter">✨</span>
+</div>
+
 <div v-motion
   :initial="{ y: -40, opacity: 0 }"
   :enter="{ y: 0, opacity: 1, transition: { delay: 200 } }">
@@ -97,6 +154,10 @@ layout: two-cols
   </div>
 </div>
 
+<div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(40, 40, 50, 0.9); padding: 0.5rem 0; text-align: center; z-index: 100; backdrop-filter: blur(10px);">
+  <span style="color: white; font-size: 0.9rem; font-weight: 500;">🚇 Subway Slides</span>
+</div>
+
 <style>
 .slidev-layout {
   background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
@@ -135,6 +196,10 @@ layout: fact
 
 <div v-click="4" class="text-center mt-12 text-2xl font-light">
   <span class="text-white opacity-90">Transform your ideas into stunning presentations</span>
+</div>
+
+<div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(50, 30, 40, 0.9); padding: 0.5rem 0; text-align: center; z-index: 100; backdrop-filter: blur(10px);">
+  <span style="color: white; font-size: 0.9rem; font-weight: 500;">🚇 Subway Slides</span>
 </div>
 
 <style>
@@ -189,6 +254,10 @@ layout: fact
 
 <div v-click="4" class="text-center mt-8">
   <span class="text-xl text-white opacity-90">⏱️ Total time: Under 2 minutes</span>
+</div>
+
+<div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(60, 20, 50, 0.9); padding: 0.5rem 0; text-align: center; z-index: 100; backdrop-filter: blur(10px);">
+  <span style="color: white; font-size: 0.9rem; font-weight: 500;">🚇 Subway Slides</span>
 </div>
 
 <style>
@@ -260,6 +329,10 @@ layout: two-cols
   </div>
 </div>
 
+<div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(20, 40, 70, 0.9); padding: 0.5rem 0; text-align: center; z-index: 100; backdrop-filter: blur(10px);">
+  <span style="color: white; font-size: 0.9rem; font-weight: 500;">🚇 Subway Slides</span>
+</div>
+
 <style>
 .slidev-layout {
   background: linear-gradient(135deg, #0052D4 0%, #4364F7 50%, #6FB1FC 100%);
@@ -306,6 +379,10 @@ layout: center
 <div v-click="3" class="mt-12 text-center">
   <p class="text-xl text-white opacity-90">Built with ❤️ at Reality Hackathon</p>
   <p class="mt-2 text-white opacity-75">Transform your ideas today!</p>
+</div>
+
+<div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(25, 50, 60, 0.9); padding: 0.5rem 0; text-align: center; z-index: 100; backdrop-filter: blur(10px);">
+  <span style="color: white; font-size: 0.9rem; font-weight: 500;">🚇 Subway Slides</span>
 </div>
 
 <style>
