@@ -110,8 +110,8 @@ p {
 </style>
 
 ---
-
 ## layout: two-cols
+---
 
 # ✨ Magical Features
 
@@ -174,8 +174,8 @@ p {
 </style>
 
 ---
-
 ## layout: fact
+---
 
 <div class="glitter-container">
   <span class="glitter" style="left: 12%; top: 25%; animation-delay: 0.3s; color: gold;">⭐</span>
