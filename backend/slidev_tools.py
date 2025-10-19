@@ -3,8 +3,13 @@
 Standalone Slidev-specific tools for working with presentations.
 These tools can be imported and used independently.
 """
-
-from typing import Optional, Tuple, List
+from claude_agent_sdk import (
+    tool,
+    create_sdk_mcp_server,
+    ClaudeSDKClient,
+    ClaudeAgentOptions,
+)
+from typing import Optional, Tuple, List, Any
 import re
 
 
@@ -20,11 +25,13 @@ def parse_slides(content: str) -> List[str]:
         List of slide contents
     """
     # Split by slide delimiter (--- with optional whitespace)
-    slides = re.split(r'\n---\n', content)
+    slides = re.split(r"\n---\n", content)
     return slides
 
 
-def get_slide_content(content: str, slide_number: int) -> Tuple[Optional[str], int, int]:
+def get_slide_content(
+    content: str, slide_number: int
+) -> Tuple[Optional[str], int, int]:
     """
     Get the content of a specific slide and its position in the file.
 
@@ -54,28 +61,17 @@ def get_slide_content(content: str, slide_number: int) -> Tuple[Optional[str], i
     return slides[slide_index], start_index, end_index
 
 
-def update_element_content(
-    file_content: str,
-    slide_number: int,
-    element_id: str,
-    new_content: str
-) -> str:
-    """
-    Update the text content of a specific element within a slide.
-    This tool looks for HTML elements with the specified ID and updates their content.
+@tool(
+    "update_element_content",
+    "Update the text content of a specific element within a slide",
+    {"file_content": str, "slide_number": int, "element_id": str, "new_content": str},
+)
+def update_element_content(args: dict[str, Any]) -> str:
+    file_content = args["file_content"]
+    slide_number = args["slide_number"]
+    element_id = args["element_id"]
+    new_content = args["new_content"]
 
-    Args:
-        file_content: The full markdown file content
-        slide_number: The slide number (1-indexed)
-        element_id: The ID of the element to update (e.g., "slide-1-title")
-        new_content: The new text content for the element
-
-    Returns:
-        Updated file content
-
-    Example:
-        Update content of <p id="intro-text">Old text</p> to "New text"
-    """
     slide_content, start_idx, end_idx = get_slide_content(file_content, slide_number)
 
     if slide_content is None:
@@ -96,7 +92,9 @@ def update_element_content(
     # If no match found, try to match self-closing tags or markdown headers with IDs
     if updated_slide == slide_content:
         # Try markdown header with ID syntax: # Title {#element_id}
-        markdown_pattern = rf'(#{{1,6}}\s+)(.*?)(\s*\{{#\s*{re.escape(element_id)}\s*\}})'
+        markdown_pattern = (
+            rf"(#{{1,6}}\s+)(.*?)(\s*\{{#\s*{re.escape(element_id)}\s*\}})"
+        )
 
         def replace_markdown(match):
             header = match.group(1)
@@ -106,44 +104,29 @@ def update_element_content(
         updated_slide = re.sub(markdown_pattern, replace_markdown, slide_content)
 
     # Replace the slide content in the original file
-    updated_content = (
-        file_content[:start_idx] +
-        updated_slide +
-        file_content[end_idx:]
-    )
+    updated_content = file_content[:start_idx] + updated_slide + file_content[end_idx:]
 
     return updated_content
 
 
-def update_element_color(
-    file_content: str,
-    slide_number: int,
-    element_id: str,
-    color: str
-) -> str:
-    """
-    Update the color of a text element within a slide using CSS styles.
-    This tool adds or updates a <style> block within the slide to set the color.
+@tool(
+    "update_element_color",
+    "Update the color of a specific element within a slide",
+    {"file_content": str, "slide_number": int, "element_id": str, "color": str},
+)
+def update_element_color(args: dict[str, Any]) -> str:
+    file_content = args["file_content"]
+    slide_number = args["slide_number"]
+    element_id = args["element_id"]
+    color = args["color"]
 
-    Args:
-        file_content: The full markdown file content
-        slide_number: The slide number (1-indexed)
-        element_id: The ID of the element to style
-        color: The color value (e.g., "red", "#FF0000", "rgb(255, 0, 0)")
-
-    Returns:
-        Updated file content
-
-    Example:
-        Adds/updates style for #intro-text { color: red; }
-    """
     slide_content, start_idx, end_idx = get_slide_content(file_content, slide_number)
 
     if slide_content is None:
         raise ValueError(f"Slide {slide_number} not found")
 
     # Check if there's already a <style> block in the slide
-    style_pattern = r'<style>(.*?)</style>'
+    style_pattern = r"<style>(.*?)</style>"
     style_match = re.search(style_pattern, slide_content, re.DOTALL)
 
     if style_match:
@@ -151,78 +134,64 @@ def update_element_color(
         existing_styles = style_match.group(1)
 
         # Check if the element ID already has a color rule
-        id_pattern = rf'#{re.escape(element_id)}\s*{{[^}}]*}}'
+        id_pattern = rf"#{re.escape(element_id)}\s*{{[^}}]*}}"
         id_match = re.search(id_pattern, existing_styles)
 
         if id_match:
             # Update existing rule
             old_rule = id_match.group(0)
             # Extract other properties if any
-            color_pattern = r'color\s*:\s*[^;]+;?'
+            color_pattern = r"color\s*:\s*[^;]+;?"
             if re.search(color_pattern, old_rule):
                 # Replace existing color
-                new_rule = re.sub(color_pattern, f'color: {color};', old_rule)
+                new_rule = re.sub(color_pattern, f"color: {color};", old_rule)
             else:
                 # Add color to existing rule
-                new_rule = old_rule.rstrip('}') + f'\n  color: {color};\n}}'
+                new_rule = old_rule.rstrip("}") + f"\n  color: {color};\n}}"
 
             updated_styles = existing_styles.replace(old_rule, new_rule)
         else:
             # Add new rule for this element
-            updated_styles = existing_styles.rstrip() + f'\n\n#{element_id} {{\n  color: {color};\n}}\n'
+            updated_styles = (
+                existing_styles.rstrip()
+                + f"\n\n#{element_id} {{\n  color: {color};\n}}\n"
+            )
 
         # Replace the style block
         updated_slide = re.sub(
             style_pattern,
-            f'<style>{updated_styles}</style>',
+            f"<style>{updated_styles}</style>",
             slide_content,
-            flags=re.DOTALL
+            flags=re.DOTALL,
         )
     else:
         # Add a new style block at the end of the slide
-        style_block = f'\n\n<style>\n#{element_id} {{\n  color: {color};\n}}\n</style>'
+        style_block = f"\n\n<style>\n#{element_id} {{\n  color: {color};\n}}\n</style>"
         updated_slide = slide_content.rstrip() + style_block
 
     # Replace the slide content in the original file
-    updated_content = (
-        file_content[:start_idx] +
-        updated_slide +
-        file_content[end_idx:]
-    )
+    updated_content = file_content[:start_idx] + updated_slide + file_content[end_idx:]
 
     return updated_content
 
 
-def update_slide_background(
-    file_content: str,
-    slide_number: int,
-    background_color: str
-) -> str:
-    """
-    Update the background color of a specific slide.
-    This tool modifies or adds the frontmatter 'background' property.
+@tool(
+    "update_slide_background",
+    "Update the background color of a specific slide",
+    {"file_content": str, "slide_number": int, "background_color": str},
+)
+def update_slide_background(args: dict[str, Any]) -> str:
+    file_content = args["file_content"]
+    slide_number = args["slide_number"]
+    background_color = args["background_color"]
 
-    Args:
-        file_content: The full markdown file content
-        slide_number: The slide number (1-indexed)
-        background_color: The background color (e.g., "#FF0000", "rgb(255, 0, 0)")
-
-    Returns:
-        Updated file content
-
-    Example:
-        Adds/updates frontmatter:
-        ---
-        background: "#FF0000"
-        ---
-    """
     slide_content, start_idx, end_idx = get_slide_content(file_content, slide_number)
 
     if slide_content is None:
         raise ValueError(f"Slide {slide_number} not found")
 
     # Check if the slide has frontmatter
-    frontmatter_pattern = r'^---\n(.*?)\n---'
+    frontmatter_pattern = r"^---\n(.*?)\n---"
     frontmatter_match = re.match(frontmatter_pattern, slide_content, re.DOTALL)
 
     if frontmatter_match:
@@ -230,25 +199,27 @@ def update_slide_background(
         frontmatter = frontmatter_match.group(1)
 
         # Check if background property exists
-        background_pattern = r'^background:\s*.*$'
+        background_pattern = r"^background:\s*.*$"
         if re.search(background_pattern, frontmatter, re.MULTILINE):
             # Replace existing background
             updated_frontmatter = re.sub(
                 background_pattern,
                 f'background: "{background_color}"',
                 frontmatter,
-                flags=re.MULTILINE
+                flags=re.MULTILINE,
             )
         else:
             # Add background property
-            updated_frontmatter = frontmatter.rstrip() + f'\nbackground: "{background_color}"'
+            updated_frontmatter = (
+                frontmatter.rstrip() + f'\nbackground: "{background_color}"'
+            )
 
         # Replace the frontmatter in the slide
         updated_slide = re.sub(
             frontmatter_pattern,
-            f'---\n{updated_frontmatter}\n---',
+            f"---\n{updated_frontmatter}\n---",
             slide_content,
-            flags=re.DOTALL
+            flags=re.DOTALL,
         )
     else:
         # Add frontmatter with background at the beginning of the slide
@@ -256,37 +227,31 @@ def update_slide_background(
         updated_slide = frontmatter + slide_content
 
     # Replace the slide content in the original file
-    updated_content = (
-        file_content[:start_idx] +
-        updated_slide +
-        file_content[end_idx:]
-    )
+    updated_content = file_content[:start_idx] + updated_slide + file_content[end_idx:]
 
     return updated_content
 
 
-def create_new_slide(
-    file_content: str,
-    slide_position: Optional[int] = None,
-    title: Optional[str] = None,
-    content: Optional[str] = None,
-    background: Optional[str] = None,
-    layout: Optional[str] = "default"
-) -> str:
-    """
-    Create a new slide in the presentation.
+@tool(
+    "create_new_slide",
+    "Create a new slide in the presentation",
+    {
+        "file_content": str,
+        "slide_position": Optional[int],
+        "title": Optional[str],
+        "content": Optional[str],
+        "background": Optional[str],
+        "layout": Optional[str],
+    },
+)
+def create_new_slide(args: dict[str, Any]) -> str:
+    file_content = args["file_content"]
+    slide_position = args["slide_position"]
+    title = args["title"]
+    content = args["content"]
+    background = args["background"]
+    layout = args["layout"]
 
-    Args:
-        file_content: The full markdown file content
-        slide_position: Position to insert the slide (1-indexed). None means append at end.
-        title: Optional title for the slide
-        content: Optional content for the slide
-        background: Optional background color
-        layout: Slide layout (default, center, etc.)
-
-    Returns:
-        Updated file content with new slide
-    """
     # Build the new slide
     slide_parts = []
 
