@@ -2,10 +2,10 @@
 theme: default
 title: AI Presentation Generator
 info: |
-  ## AI Presentation Generator
-  Transform your ideas into stunning presentations with AI
+    ## AI Presentation Generator
+    Transform your ideas into stunning presentations with AI
 drawings:
-  persist: false
+    persist: false
 transition: slide-left
 mdc: true
 ---
@@ -110,10 +110,19 @@ p {
 </style>
 
 ---
-layout: two-cols
----
+
+## layout: two-cols
 
 # ✨ Magical Features
+
+<div class="glitter-container">
+  <span class="glitter" style="left: 5%; top: 10%; animation-delay: 0.2s;">💫</span>
+  <span class="glitter" style="left: 85%; top: 20%; animation-delay: 0.7s;">⭐</span>
+  <span class="glitter" style="left: 20%; top: 80%; animation-delay: 1.2s;">✨</span>
+  <span class="glitter" style="left: 75%; top: 70%; animation-delay: 1.7s;">💫</span>
+  <span class="glitter" style="left: 40%; top: 30%; animation-delay: 2.2s;">⭐</span>
+  <span class="glitter" style="left: 60%; top: 90%; animation-delay: 0.5s;">✨</span>
+</div>
 
 <div v-click style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
   <div style="font-size: 1.8rem;">⚡</div>
@@ -165,8 +174,16 @@ layout: two-cols
 </style>
 
 ---
-layout: fact
----
+
+## layout: fact
+
+<div class="glitter-container">
+  <span class="glitter" style="left: 12%; top: 25%; animation-delay: 0.3s; color: gold;">⭐</span>
+  <span class="glitter" style="left: 88%; top: 15%; animation-delay: 0.8s; color: gold;">✨</span>
+  <span class="glitter" style="left: 30%; top: 85%; animation-delay: 1.3s; color: gold;">💫</span>
+  <span class="glitter" style="left: 70%; top: 75%; animation-delay: 1.8s; color: gold;">⭐</span>
+  <span class="glitter" style="left: 50%; top: 10%; animation-delay: 2.3s; color: gold;">✨</span>
+</div>
 
 <div class="grid grid-cols-3 gap-8">
   <div v-click v-motion
@@ -211,6 +228,15 @@ layout: fact
 ---
 
 # 🚀 Three Steps to Amazing
+
+<div class="glitter-container">
+  <span class="glitter" style="left: 8%; top: 18%; animation-delay: 0.1s;">🌟</span>
+  <span class="glitter" style="left: 92%; top: 28%; animation-delay: 0.6s;">✨</span>
+  <span class="glitter" style="left: 18%; top: 88%; animation-delay: 1.1s;">💫</span>
+  <span class="glitter" style="left: 78%; top: 68%; animation-delay: 1.6s;">🌟</span>
+  <span class="glitter" style="left: 48%; top: 38%; animation-delay: 2.1s;">✨</span>
+  <span class="glitter" style="left: 65%; top: 95%; animation-delay: 0.4s;">💫</span>
+</div>
 
 <div class="mt-8">
 
@@ -272,6 +298,15 @@ layout: two-cols
 
 # 🔋 We Love Red Bull
 
+<div class="glitter-container">
+  <span class="glitter" style="left: 15%; top: 12%; animation-delay: 0.4s; color: #FFD700;">⚡</span>
+  <span class="glitter" style="left: 82%; top: 22%; animation-delay: 0.9s; color: #FFD700;">✨</span>
+  <span class="glitter" style="left: 22%; top: 82%; animation-delay: 1.4s; color: #FFD700;">⚡</span>
+  <span class="glitter" style="left: 72%; top: 62%; animation-delay: 1.9s; color: #FFD700;">✨</span>
+  <span class="glitter" style="left: 42%; top: 42%; animation-delay: 2.4s; color: #FFD700;">⚡</span>
+  <span class="glitter" style="left: 58%; top: 92%; animation-delay: 0.7s; color: #FFD700;">✨</span>
+</div>
+
 <div v-click v-motion
   :initial="{ y: 20, opacity: 0 }"
   :enter="{ y: 0, opacity: 1 }"
@@ -294,22 +329,6 @@ layout: two-cols
   <p style="color: rgba(255,255,255,0.9);">Every can gave us wings to push through challenges and debug with clarity</p>
 </div>
 
-<div v-click="3" v-motion
-  :initial="{ y: 20, opacity: 0 }"
-  :enter="{ y: 0, opacity: 1 }"
-  style="margin-bottom: 1.5rem; padding: 1.2rem; background: rgba(255,255,255,0.1); border-radius: 12px; backdrop-filter: blur(10px);">
-  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-    <span style="font-size: 2rem;">💙</span>
-    <h3 style="font-size: 1.3rem; font-weight: bold; color: white;">Hackathon MVP</h3>
-  </div>
-  <p style="color: rgba(255,255,255,0.9);">The real MVP of Reality Hackathon - powering late-night coding sessions</p>
-</div>
-
-<div v-click="5" style="margin-top: 2rem;">
-  <p style="font-size: 1.1rem; color: rgba(255,255,255,0.9); font-weight: 500;">
-    🙏 Special thanks to Red Bull for being an incredible hackathon sponsor!
-  </p>
-</div>
 
 ::right::
 
@@ -344,9 +363,20 @@ layout: two-cols
 }
 </style>
 
+
 ---
 layout: center
 ---
+<div class="glitter-container">
+  <span class="glitter" style="left: 10%; top: 15%; animation-delay: 0.2s;">🌟</span>
+  <span class="glitter" style="left: 90%; top: 25%; animation-delay: 0.7s;">✨</span>
+  <span class="glitter" style="left: 25%; top: 75%; animation-delay: 1.2s;">💫</span>
+  <span class="glitter" style="left: 75%; top: 85%; animation-delay: 1.7s;">🌟</span>
+  <span class="glitter" style="left: 50%; top: 5%; animation-delay: 2.2s;">✨</span>
+  <span class="glitter" style="left: 35%; top: 95%; animation-delay: 0.5s;">💫</span>
+  <span class="glitter" style="left: 65%; top: 55%; animation-delay: 1.0s;">🌟</span>
+  <span class="glitter" style="left: 20%; top: 45%; animation-delay: 1.5s;">✨</span>
+</div>
 
 <div v-motion
   :initial="{ y: -30, opacity: 0 }"
