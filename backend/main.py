@@ -26,7 +26,7 @@ app.add_middleware(
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     logger.warning("OPENAI_API_KEY not found in environment variables")
-    #api_key = ""
+    api_key = ""
 
 client = OpenAI(api_key=api_key)
 
